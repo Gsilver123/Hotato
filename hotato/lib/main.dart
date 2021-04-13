@@ -46,21 +46,9 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
+class _MyHomePageState extends State<MyHomePage> {
 
-  AnimationController animationController;
-
-  @override
-  void initState() {
-    animationController = AnimationController(duration: const Duration(milliseconds: 2000), vsync: this);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    animationController.dispose();
-    super.dispose();
-  }
+  bool hasFlicked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -70,10 +58,15 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    animationController.forward();
-    animationController.repeat();
     
-    
+    Widget spinningPotato = Container(
+      child: ImageFling(onComplete: onComplete)
+    );
+
+    Widget youFlicked = Container(
+      alignment: Alignment.center,
+      child: Text('You\'re Safe ... For Now', style: TextStyle(color: Colors.red, fontSize: 40.0, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -81,9 +74,18 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Container(
-        child: ImageFling(),
-      )
+      body: hasFlicked ? youFlicked : spinningPotato,
+      floatingActionButton: FloatingActionButton(
+        onPressed: onComplete,
+        tooltip: 'Increment',
+        child: Icon(Icons.add),
+      ),
     );
+  }
+
+  void onComplete() {
+    setState(() {
+      hasFlicked = true;
+    });
   }
 }
