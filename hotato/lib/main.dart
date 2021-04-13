@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'imageFling.dart';
+import 'loginScreen.dart';
 
 void main() {
   runApp(MyApp());
@@ -49,6 +50,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   bool hasFlicked = false;
+  bool hasLoggedIn = false;
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +61,8 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     
+    Widget loginPage = LoginScreen();
+
     Widget spinningPotato = Container(
       child: ImageFling(onComplete: onComplete)
     );
@@ -74,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: hasFlicked ? youFlicked : spinningPotato,
+      body: hasLoggedIn ? (hasFlicked ? youFlicked : spinningPotato) : loginPage,
       floatingActionButton: FloatingActionButton(
         onPressed: onComplete,
         tooltip: 'Increment',
