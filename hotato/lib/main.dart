@@ -23,15 +23,14 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Hotato'),
+      home: MyHomePage(titleAssest: 'assets/images/logo.png',),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key key, this.titleAssest}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -42,7 +41,7 @@ class MyHomePage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-  final String title;
+  final String titleAssest;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -54,6 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   bool hasFlicked = false;
   bool hasLoggedIn = false;
+  bool noPotato = false;
 
   @override
   Widget build(BuildContext context) {
@@ -63,27 +63,44 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    
+    var size = MediaQuery.of(context).size;
+
     Widget loginPage = LoginScreen(onLogin: (username) { 
       requestNewUser(username);
     },);
 
-    Widget spinningPotato = Container(
-      child: ImageFling(onComplete: onComplete)
-    );
+    Widget imageFling = ImageFling(onComplete: onComplete);
 
     Widget youFlicked = Container(
       alignment: Alignment.center,
-      child: Text('You\'re Safe ... For Now', style: TextStyle(color: Colors.red, fontSize: 40.0, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+      child: Image.asset('assets/images/safe/safe.png'),
     );
+
+    Widget spinningPotato = Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Flexible(flex: 5, child: Container(alignment: AlignmentDirectional.bottomCenter, child: imageFling)),
+        Flexible(flex: 4, child: Container(alignment: AlignmentDirectional.center, child: Image.asset('assets/images/firepit/1.firepit-middle.png',)))
+      ]
+    );
+
+    Widget youreSafe = Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Flexible(flex: 5, child: Container(alignment: AlignmentDirectional.bottomCenter, child: youFlicked)),
+        Flexible(flex: 4, child: Container(alignment: AlignmentDirectional.center, child: Image.asset('assets/images/firepit/1.firepit-start.png',)))
+      ]
+    );
+
+    Image headerImage = Image.asset(widget.titleAssest);
 
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: headerImage,
       ),
-      body: hasLoggedIn ? (hasFlicked ? youFlicked : spinningPotato) : loginPage,
+      body: hasLoggedIn ? (hasFlicked ? youreSafe : spinningPotato) : loginPage,
       floatingActionButton: FloatingActionButton(
         onPressed: onComplete,
         tooltip: 'Increment',

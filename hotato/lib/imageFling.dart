@@ -86,18 +86,21 @@ class _ImageFlingState extends State<ImageFling> with TickerProviderStateMixin {
       onPanEnd: (details) {
         _runAnimation(details.velocity.pixelsPerSecond, size);
 
-        if (_dragAlignment.y < -2.5) {
+        if (_dragAlignment.y < -.5) {
           print("Yayyyy");
           animationController.stop();
           physicsController.stop();
           widget.onComplete();
+        } else {
+          print(_dragAlignment.y);
+          print(Alignment.topCenter.y);
         }
       },
       child: Align(
         alignment: _dragAlignment,
         child: RotationTransition(
           turns: Tween(begin: 0.0, end: 1.0).animate(animationController),
-          child: Image.asset('assets/images/potato_sleep_deprived.png'),
+          child: Image.asset('assets/images/potato_sleep_deprived.png', height: size.height * .3,),
         )
       )
     );

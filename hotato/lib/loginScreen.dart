@@ -30,25 +30,49 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+
     return Column (
       children: [
+        Image.asset('assets/images/logo.png'),
         Form(
           key: form,
-          child: TextFormField(
-            controller: textController,
-            validator: (text) {
-              return validationText(text);
-            },
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Input Username'
-            ),
+          child: SizedBox(
+            width: size.width * .8,
+            child: TextFormField(
+              controller: textController,
+              validator: (text) {
+                return validationText(text);
+              },
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
+                hintText: 'Input Username'
+              ),
+            )
           )
         ), 
-        ElevatedButton(
-          onPressed: attemptLogin,
-          child: Text('Start!'),)
+        ClipOval(
+          child: Material(
+            color: Colors.blue,
+            child: InkWell(
+              splashColor: Colors.red, // inkwell color
+              child: SizedBox(width: 75,
+                height: 75, 
+                child: Align(
+                  alignment: AlignmentDirectional.center, 
+                  child:Text('Start!', 
+                    textAlign: TextAlign.center, 
+                    style: TextStyle(color: Colors.white, fontSize: 14.0, fontWeight: FontWeight.bold),
+                    )
+                  )
+                ),
+              onTap: () { attemptLogin(); },
+            ),
+          )
+        )
       ],
+    mainAxisAlignment: MainAxisAlignment.spaceAround,
     );
   }
 }
