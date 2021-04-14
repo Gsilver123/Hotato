@@ -138,7 +138,11 @@ class _ImageFlingState extends State<ImageFling> with TickerProviderStateMixin {
         alignment: _dragAlignment,
         child: RotationTransition(
           turns: Tween(begin: 0.0, end: 1.0).animate(animationController),
+<<<<<<< Updated upstream
           child: Image.asset(currentImage ?? 'assets/images/potatos/1.potato-happy.png', height: size.height * .5,),
+=======
+          child: Image.asset('assets/images/potatos/1.potato-happy.png', height: size.height * .3,),
+>>>>>>> Stashed changes
         )
       )
     );
