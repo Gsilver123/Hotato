@@ -54,8 +54,6 @@ class _MyHomePageState extends State<MyHomePage> {
   bool hasFlicked = false;
   bool hasLoggedIn = false;
   bool noPotato = false;
-  bool hasLost = false;
-
 
   @override
   Widget build(BuildContext context) {
@@ -78,22 +76,13 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Image.asset('assets/images/safe/safe.png'),
     );
 
-    Widget timerHigh = Column(
+    Widget spinningPotato = Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Flexible(flex: 5, child: Container(alignment: AlignmentDirectional.bottomCenter, child: imageFling)),
         Flexible(flex: 4, child: Container(alignment: AlignmentDirectional.center, child: Image.asset('assets/images/firepit/1.firepit-middle.png',)))
       ]
     );
-
-    Widget timerLow = Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Flexible(flex: 5, child: Container(alignment: AlignmentDirectional.bottomCenter, child: imageFling)),
-        Flexible(flex: 4, child: Container(alignment: AlignmentDirectional.center, child: Image.asset('assets/images/firepit/3.firepit-end.png',)))
-      ]
-    );
-
 
     Widget youreSafe = Column(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -111,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: headerImage,
       ),
-      body: hasLoggedIn ? (hasFlicked ? youreSafe : timerHigh) : loginPage,
+      body: hasLoggedIn ? (hasFlicked ? youreSafe : spinningPotato) : loginPage,
       floatingActionButton: FloatingActionButton(
         onPressed: onComplete,
         tooltip: 'Increment',
