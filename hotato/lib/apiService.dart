@@ -8,6 +8,7 @@ class ApiService {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
+        'key': 'degrrswwerw',
         'username': username,
       }),
     );
@@ -20,4 +21,22 @@ class ApiService {
 
     callback(response.statusCode == 200);
   }
+
+  void updateUserGameState(bool hasLived) async {
+    final response = await http.post(Uri.https('0qw812c8w8.execute-api.us-east-1.amazonaws.com', 'alpha'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, Object>{
+        'key': '12rewdwrt3',
+        'state': hasLived ? 1 : 0,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print('updated'); 
+    } else {
+      print(response.statusCode);
+    }
+  } 
 }

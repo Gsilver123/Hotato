@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'imageFling.dart';
 import 'loginScreen.dart';
 import 'apiService.dart';
+import 'sharedPreferences.dart';
 
 void main() {
   runApp(MyApp());
@@ -50,12 +51,15 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   ApiService apiService = ApiService();
+  MySharedPreferences sharedPreferences = MySharedPreferences();
 
   bool hasFlicked = false;
   bool hasLoggedIn = false;
   bool noPotato = false;
   bool hasDied = false;
   bool hasWon = false;
+  bool firstTime = true;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +70,10 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     var size = MediaQuery.of(context).size;
+    sharedPreferences.isFirstLoad((hasLoaded, uuid) => {
+      setFirstTimeState(!hasLoaded)
+      
+    });
 
     Widget loginPage = LoginScreen(onLogin: (username) { 
       requestNewUser(username);
@@ -124,6 +132,12 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  void setFirstTimeState(bool firstTime) {
+    setState(() {
+      this.firstTime = firstTime;
+    });
+  }
+
   void onComplete(bool flickedInTime) {
     setState(() {
       if (flickedInTime) {
@@ -132,6 +146,12 @@ class _MyHomePageState extends State<MyHomePage> {
         hasDied = true;
       }
     });
+
+    updateUserGameState(flickedInTime);
+  }
+
+  void updateUserGameState(bool flickedInTime) {
+    apiService.updateUserGameState(flickedInTime);
   }
 
   void requestNewUser(String username) {
