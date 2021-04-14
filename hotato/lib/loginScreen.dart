@@ -11,15 +11,17 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
 
   final TextEditingController textController = TextEditingController();
+  final form = GlobalKey<FormState>();
 
   void attemptLogin() {
-    if (textController.text.isNotEmpty) {
-      widget.onLogin();
+    final isValid = form.currentState.validate();
+    if (isValid) {
+      widget.onLogin(textController.text);
     } 
   }
 
-  String validationText() {
-    if (textController.text.isNotEmpty) {
+  String validationText(String text) {
+    if (text.isEmpty) {
       return 'Please input a username';
     } else {
       return null;
@@ -30,13 +32,18 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Column (
       children: [
-        TextField(
-          controller: textController,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Enter a search term',
-            errorText: validationText()
-          ),
+        Form(
+          key: form,
+          child: TextFormField(
+            controller: textController,
+            validator: (text) {
+              return validationText(text);
+            },
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: 'Input Username'
+            ),
+          )
         ), 
         ElevatedButton(
           onPressed: attemptLogin,

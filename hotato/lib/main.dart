@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'imageFling.dart';
 import 'loginScreen.dart';
+import 'apiService.dart';
 
 void main() {
   runApp(MyApp());
@@ -49,6 +50,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
+  ApiService apiService = ApiService();
+
   bool hasFlicked = false;
   bool hasLoggedIn = false;
 
@@ -61,7 +64,9 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     
-    Widget loginPage = LoginScreen();
+    Widget loginPage = LoginScreen(onLogin: (username) { 
+      requestNewUser(username);
+    },);
 
     Widget spinningPotato = Container(
       child: ImageFling(onComplete: onComplete)
@@ -90,6 +95,14 @@ class _MyHomePageState extends State<MyHomePage> {
   void onComplete() {
     setState(() {
       hasFlicked = true;
+    });
+  }
+
+  void requestNewUser(String username) {
+    apiService.postInitialUser(username, (isLoggedIn) {
+      if (isLoggedIn) { 
+        setState(() { hasLoggedIn = true; });  
+      }
     });
   }
 }
