@@ -78,15 +78,15 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Image.asset('assets/images/safe/safe.png'),
     );
 
-    // Widget youDied = Container(
-    //   alignment: Alignment.center,
-    //   child: Image.asset('assets/images/dead/dead.png'),
-    // );
+    Widget youDied = Container(
+      alignment: Alignment.center,
+      child: Image.asset('assets/images/dead/dead.png'),
+    );
 
-    // Widget youSurvived = Container(
-    //   alignment: Alignment.center,
-    //   child: Image.asset('assets/images/winner/winner.png'),
-    // );
+    Widget youSurvived = Container(
+      alignment: Alignment.center,
+      child: Image.asset('assets/images/winner/winner.png'),
+    );
     
     Widget spinningPotato = Column(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -104,19 +104,13 @@ class _MyHomePageState extends State<MyHomePage> {
       ]
     );
 
-    // Widget youLost = Column(
-    //   mainAxisAlignment: MainAxisAlignment.end,
-    //   children: [
-    //     Flexible(flex: 5, child: Container(alignment: AlignmentDirectional.bottomCenter, child: youDied)),
-    //   ]
-    // );
-    
-    // Widget youWon = Column(
-    //   mainAxisAlignment: MainAxisAlignment.end,
-    //   children: [
-    //     Flexible(flex: 5, child: Container(alignment: AlignmentDirectional.bottomCenter, child: youSurvived)),
-    //   ]
-    // );
+    Widget notYourTurn = Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Flexible(flex: 5, child: Container(alignment: AlignmentDirectional.bottomCenter, child: Text('Not your turn yet'))),
+        Flexible(flex: 4, child: Container(alignment: AlignmentDirectional.center, child: Image.asset('assets/images/firepit/1.firepit-start.png',)))
+      ]
+    );
 
     Image headerImage = Image.asset(widget.titleAssest);
 
@@ -126,18 +120,17 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: headerImage,
       ),
-      body: hasLoggedIn ? (hasFlicked ? youreSafe : spinningPotato) : loginPage,
-      floatingActionButton: FloatingActionButton(
-        onPressed: onComplete,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
+      body: hasLoggedIn ? (noPotato ? notYourTurn : (hasDied ? youDied : (hasWon ? youSurvived : (hasFlicked ? youreSafe : spinningPotato)))) : loginPage,
     );
   }
 
-  void onComplete() {
+  void onComplete(bool flickedInTime) {
     setState(() {
-      hasFlicked = true;
+      if (flickedInTime) {
+        hasFlicked = true;
+      } else {
+        hasDied = true;
+      }
     });
   }
 

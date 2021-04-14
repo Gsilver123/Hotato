@@ -3,7 +3,7 @@ import 'package:flutter/physics.dart';
 import 'dart:async';
 
 class ImageFling extends StatefulWidget {
-  final Function onComplete;
+  final Function(bool) onComplete;
   ImageFling({this.onComplete});
 
   @override
@@ -48,6 +48,7 @@ class _ImageFlingState extends State<ImageFling> with TickerProviderStateMixin {
       oneSec,
       (Timer timer) {
         if (timeLeft == 0) {
+          widget.onComplete(false);
           setState(() {
             timer.cancel();
             currentImage = currentImageAsset();
@@ -67,10 +68,8 @@ class _ImageFlingState extends State<ImageFling> with TickerProviderStateMixin {
       return 'assets/images/potatos/1.potato-happy.png';
     } else if (timeLeft >= 4) {
       return 'assets/images/potatos/2.potato-hot.png';
-    } else if (timeLeft >= 1) {
-      return 'assets/images/potatos/3.potato-fire.png';
     } else {
-      return 'assets/images/potatos/4.potato-dead.png';
+      return 'assets/images/potatos/3.potato-fire.png';
     }
   }
 
@@ -128,7 +127,7 @@ class _ImageFlingState extends State<ImageFling> with TickerProviderStateMixin {
           print("Yayyyy");
           animationController.stop();
           physicsController.stop();
-          widget.onComplete();
+          widget.onComplete(true);
         } else {
           print(_dragAlignment.y);
           print(Alignment.topCenter.y);
