@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
+import 'dart:async';
 
 class ImageFling extends StatefulWidget {
   final Function onComplete;
@@ -14,6 +15,9 @@ class _ImageFlingState extends State<ImageFling> with TickerProviderStateMixin {
   AnimationController animationController;
   AnimationController physicsController;
   Animation<Alignment> animation;
+  Timer timer;
+  var timeLeft = 10;
+  String currentImage;
 
   Alignment _dragAlignment = Alignment.center;
 
@@ -26,6 +30,7 @@ class _ImageFlingState extends State<ImageFling> with TickerProviderStateMixin {
         _dragAlignment = animation.value;
       });
     });
+    startTimer();
     super.initState();
   }
 
@@ -33,7 +38,40 @@ class _ImageFlingState extends State<ImageFling> with TickerProviderStateMixin {
   void dispose() {
     animationController.dispose();
     physicsController.dispose();
+    timer.cancel();
     super.dispose();
+  }
+
+  void startTimer() {
+    const oneSec = const Duration(seconds: 1);
+    timer = new Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        if (timeLeft == 0) {
+          setState(() {
+            timer.cancel();
+            currentImage = currentImageAsset();
+          });
+        } else {
+          setState(() {
+            timeLeft--;
+            currentImage = currentImageAsset();
+          });
+        }
+      },
+    );
+  }
+
+  String currentImageAsset() {
+    if (timeLeft >= 7) {
+      return 'assets/images/potatos/1.potato-happy.png';
+    } else if (timeLeft >= 4) {
+      return 'assets/images/potatos/2.potato-hot.png';
+    } else if (timeLeft >= 1) {
+      return 'assets/images/potatos/3.potato-fire.png';
+    } else {
+      return 'assets/images/potatos/4.potato-dead.png';
+    }
   }
 
   /// Calculates and runs a [SpringSimulation].
@@ -86,7 +124,7 @@ class _ImageFlingState extends State<ImageFling> with TickerProviderStateMixin {
       onPanEnd: (details) {
         _runAnimation(details.velocity.pixelsPerSecond, size);
 
-        if (_dragAlignment.y < -.5) {
+        if (_dragAlignment.y < -.6) {
           print("Yayyyy");
           animationController.stop();
           physicsController.stop();
@@ -100,7 +138,7 @@ class _ImageFlingState extends State<ImageFling> with TickerProviderStateMixin {
         alignment: _dragAlignment,
         child: RotationTransition(
           turns: Tween(begin: 0.0, end: 1.0).animate(animationController),
-          child: Image.asset('assets/images/potato_sleep_deprived.png', height: size.height * .3,),
+          child: Image.asset(currentImage ?? 'assets/images/potatos/1.potato-happy.png', height: size.height * .5,),
         )
       )
     );
