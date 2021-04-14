@@ -54,6 +54,8 @@ class _MyHomePageState extends State<MyHomePage> {
   bool hasFlicked = false;
   bool hasLoggedIn = false;
   bool noPotato = false;
+  bool hasDied = false;
+  bool hasWon = false;
 
   @override
   Widget build(BuildContext context) {
@@ -76,6 +78,16 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Image.asset('assets/images/safe/safe.png'),
     );
 
+    // Widget youDied = Container(
+    //   alignment: Alignment.center,
+    //   child: Image.asset('assets/images/dead/dead.png'),
+    // );
+
+    // Widget youSurvived = Container(
+    //   alignment: Alignment.center,
+    //   child: Image.asset('assets/images/winner/winner.png'),
+    // );
+    
     Widget spinningPotato = Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -91,6 +103,20 @@ class _MyHomePageState extends State<MyHomePage> {
         Flexible(flex: 4, child: Container(alignment: AlignmentDirectional.center, child: Image.asset('assets/images/firepit/1.firepit-start.png',)))
       ]
     );
+
+    // Widget youLost = Column(
+    //   mainAxisAlignment: MainAxisAlignment.end,
+    //   children: [
+    //     Flexible(flex: 5, child: Container(alignment: AlignmentDirectional.bottomCenter, child: youDied)),
+    //   ]
+    // );
+    
+    // Widget youWon = Column(
+    //   mainAxisAlignment: MainAxisAlignment.end,
+    //   children: [
+    //     Flexible(flex: 5, child: Container(alignment: AlignmentDirectional.bottomCenter, child: youSurvived)),
+    //   ]
+    // );
 
     Image headerImage = Image.asset(widget.titleAssest);
 
