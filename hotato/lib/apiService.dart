@@ -55,6 +55,7 @@ class ApiService {
       print('Retrieved Initial State');
       var decoded = json.decode(response.body.toString());
       print('State: ' + json.decode(decoded['body'].toString())['state'].toString());
+      print('Has Potato: ' + json.decode(decoded['body'].toString())['has_potato'].toString());
       callback(json.decode(decoded['body'].toString())['state'], json.decode(decoded['body'].toString())['has_potato']);
     } else {
       print(response.statusCode);
