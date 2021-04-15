@@ -63,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool admin = false;
   String uuid;
   Timer timer;
-  var timeLeft = 10;
+  var timeLeft = 5;
   
 
   @override
@@ -91,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
       (Timer timer) {
         if (timeLeft == 0) {
           setState(() {
-            timeLeft = 10;
+            timeLeft = 5;
           });
           getInitialState(uuid);
         } else {
