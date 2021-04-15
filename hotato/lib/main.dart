@@ -59,6 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool hasDied = false;
   bool hasWon = false;
   bool firstTime = true;
+  String uuid;
   
 
   @override
@@ -71,12 +72,11 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     var size = MediaQuery.of(context).size;
     sharedPreferences.isFirstLoad((hasLoaded, uuid) => {
-      setFirstTimeState(!hasLoaded)
-      
+      setFirstTimeState(!hasLoaded, uuid)
     });
 
     Widget loginPage = LoginScreen(onLogin: (username) { 
-      requestNewUser(username);
+      requestNewUser(username, uuid);
     },);
 
     Widget imageFling = ImageFling(onComplete: onComplete);
@@ -132,9 +132,10 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void setFirstTimeState(bool firstTime) {
+  void setFirstTimeState(bool firstTime, String uuid) {
     setState(() {
       this.firstTime = firstTime;
+      this.uuid = uuid;
     });
   }
 
@@ -151,11 +152,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void updateUserGameState(bool flickedInTime) {
-    apiService.updateUserGameState(flickedInTime);
+    apiService.updateUserGameState(flickedInTime, uuid);
   }
 
-  void requestNewUser(String username) {
-    apiService.postInitialUser(username, (isLoggedIn) {
+  void requestNewUser(String username, String uuid) {
+    apiService.postInitialUser(username, uuid, (isLoggedIn) {
       if (isLoggedIn) { 
         setState(() { hasLoggedIn = true; });  
       }
