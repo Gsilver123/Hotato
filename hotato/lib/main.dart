@@ -216,18 +216,19 @@ class _MyHomePageState extends State<MyHomePage> {
     apiService.getInitialState(uuid, (state, hasPotato) {
       setState(() {
         if (state == 0) {
+          this.noPotato = false;
           this.hasDied = true;
         } else if (state == 1) {
+          if (hasPotato == 0) {
+            this.noPotato = true;
+          } else if (hasPotato == 1) {
+            this.noPotato = false;
+          }
           this.hasDied = false;
         } else if (state == 2) {
+          this.noPotato = false;
           this.hasWon = true;
         } 
-
-        if (hasPotato == 0) {
-          this.noPotato = true;
-        } else if (hasPotato == 1) {
-          this.noPotato = false;
-        }
       });
     });
   }
