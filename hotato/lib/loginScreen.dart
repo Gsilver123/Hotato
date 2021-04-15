@@ -34,7 +34,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Column (
       children: [
-        Image.asset('assets/images/logo.png'),
         Form(
           key: form,
           child: SizedBox(
@@ -47,23 +46,24 @@ class _LoginScreenState extends State<LoginScreen> {
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))),
-                hintText: 'Input Username'
+                hintText: 'First name & Last initial'
               ),
             )
           )
         ), 
+        Image.asset('assets/images/logo.png'),
         ClipOval(
           child: Material(
-            color: Colors.blue,
+            color: Colors.red[400],
             child: InkWell(
               splashColor: Colors.red, // inkwell color
-              child: SizedBox(width: 75,
-                height: 75, 
+              child: SizedBox(width: 115,
+                height: 115, 
                 child: Align(
                   alignment: AlignmentDirectional.center, 
-                  child:Text('Start!', 
+                  child:Text('Play!', 
                     textAlign: TextAlign.center, 
-                    style: TextStyle(color: Colors.white, fontSize: 14.0, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold),
                     )
                   )
                 ),
