@@ -218,15 +218,18 @@ class _MyHomePageState extends State<MyHomePage> {
         if (state == 0) {
           this.noPotato = false;
           this.hasDied = true;
+          this.hasWon = false;
         } else if (state == 1) {
           if (hasPotato == 0) {
             this.noPotato = true;
           } else if (hasPotato == 1) {
             this.noPotato = false;
           }
+          this.hasWon = false;
           this.hasDied = false;
         } else if (state == 2) {
           this.noPotato = false;
+          this.hasDied = false;
           this.hasWon = true;
         } 
       });
