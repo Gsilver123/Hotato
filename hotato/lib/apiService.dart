@@ -30,6 +30,7 @@ class ApiService {
       body: jsonEncode(<String, Object>{
         'key': uuid,
         'state': hasLived ? 1 : 0,
+        'time': DateTime.now().millisecondsSinceEpoch / 1000
       }),
     );
 
@@ -39,4 +40,41 @@ class ApiService {
       print(response.statusCode);
     }
   } 
+
+  void getInitialState(String uuid, Function(int, int) callback) async {
+    final response = await http.post(Uri.https('4pt18y20i9.execute-api.us-east-1.amazonaws.com', 'alpha'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, Object>{
+        'key': uuid
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print('Retrieved Initial State');
+      var decoded = json.decode(response.body.toString());
+      callback(json.decode(decoded['body'].toString())['state'], json.decode(decoded['body'].toString())['has_potato']);
+    } else {
+      print(response.statusCode);
+      callback(0, 0);
+    }
+  }
+
+  void startGame() async {
+    final response = await http.post(Uri.https('i7zrveu7uf.execute-api.us-east-1.amazonaws.com', 'alpha'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, Object>{
+        
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print('yay!');
+    } else {
+      print('Noo');
+    }
+  }
 }

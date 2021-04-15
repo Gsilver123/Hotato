@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
   final Function onLogin;
-  LoginScreen({this.onLogin});
+  final Function onAdmin;
+  LoginScreen({this.onLogin, this.onAdmin});
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -16,7 +17,11 @@ class _LoginScreenState extends State<LoginScreen> {
   void attemptLogin() {
     final isValid = form.currentState.validate();
     if (isValid) {
-      widget.onLogin(textController.text);
+      if (textController.text == "admin12345") {
+        widget.onAdmin();
+      } else {
+        widget.onLogin(textController.text);
+      }
     } 
   }
 

@@ -3,6 +3,7 @@ import 'imageFling.dart';
 import 'loginScreen.dart';
 import 'apiService.dart';
 import 'sharedPreferences.dart';
+import 'dart:async';
 
 void main() {
   runApp(MyApp());
@@ -56,11 +57,51 @@ class _MyHomePageState extends State<MyHomePage> {
 
   bool hasFlicked = false;
   bool hasLoggedIn = false;
-  bool noPotato = false;
+  bool noPotato = true;
   bool hasDied = false;
   bool hasWon = false;
+  bool admin = false;
   String uuid;
+  Timer timer;
+  var timeLeft = 10;
   
+
+  @override
+  void initState() {
+    sharedPreferences.isFirstLoad((hasLoaded, uuid) {
+      print('HasLoaded: ' + hasLoaded.toString());
+      print('uuid: ' + uuid);
+      setFirstTimeState(!hasLoaded, uuid);
+    });
+
+    getInitialState(uuid);
+    startTimer();
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
+  void startTimer() {
+    const oneSec = const Duration(seconds: 1);
+    timer = new Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        if (timeLeft == 0) {
+          setState(() {
+            timeLeft = 10;
+          });
+          getInitialState(uuid);
+        } else {
+          setState(() {
+            timeLeft--;
+          });
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,13 +112,15 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     var size = MediaQuery.of(context).size;
-    sharedPreferences.isFirstLoad((hasLoaded, uuid) => {
-      setFirstTimeState(!hasLoaded, uuid)
-    });
+
 
     Widget loginPage = LoginScreen(onLogin: (username) { 
       requestNewUser(username, uuid);
-    },);
+    }, onAdmin: () {
+      setState(() {
+        admin = true;
+      });
+    });
 
     Widget imageFling = ImageFling(onComplete: onComplete);
 
@@ -96,6 +139,19 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Image.asset('assets/images/winner/winner.png'),
     );
     
+    Widget notUpYet = Container(
+      alignment: Alignment.center,
+      child: Image.asset('assets/images/getready.png'),
+    );
+
+    Widget adminPage = Container(
+      alignment: Alignment.center,
+      child: ElevatedButton(
+        onPressed: startGame,
+        child: Text("Start Game")
+        ),
+    );
+
     Widget spinningPotato = Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -112,14 +168,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ]
     );
 
-    Widget notYourTurn = Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Flexible(flex: 5, child: Container(alignment: AlignmentDirectional.bottomCenter, child: Text('Not your turn yet'))),
-        Flexible(flex: 4, child: Container(alignment: AlignmentDirectional.center, child: Image.asset('assets/images/firepit/1.firepit-start.png',)))
-      ]
-    );
-
     Image headerImage = Image.asset(widget.titleAssest);
 
     return Scaffold(
@@ -129,7 +177,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: headerImage,
       ),
       resizeToAvoidBottomInset: false,
-      body: hasLoggedIn ? (noPotato ? notYourTurn : (hasDied ? youDied : (hasWon ? youSurvived : (hasFlicked ? youreSafe : spinningPotato)))) : loginPage,
+      body: admin ? adminPage : (hasLoggedIn ? (noPotato ? (hasDied ? youDied : notUpYet) : (hasDied ? youDied : (hasWon ? youSurvived : (hasFlicked ? youreSafe : spinningPotato)))) : loginPage),
     );
   }
 
@@ -162,5 +210,29 @@ class _MyHomePageState extends State<MyHomePage> {
         setState(() { hasLoggedIn = true; });  
       }
     });
+  }
+
+  void getInitialState(String uuid) {
+    apiService.getInitialState(uuid, (state, hasPotato) {
+      setState(() {
+        if (state == 0) {
+          this.hasDied = true;
+        } else if (state == 1) {
+          this.hasDied = false;
+        } else if (state == 2) {
+          this.hasWon = true;
+        } 
+
+        if (hasPotato == 0) {
+          this.noPotato = true;
+        } else if (hasPotato == 1) {
+          this.noPotato = false;
+        }
+      });
+    });
+  }
+
+  void startGame() {
+    apiService.startGame();
   }
 }
