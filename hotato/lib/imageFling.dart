@@ -92,7 +92,7 @@ class _ImageFlingState extends State<ImageFling> with TickerProviderStateMixin {
 
     const spring = SpringDescription(
       mass: 30,
-      stiffness: .5,
+      stiffness: .6,
       damping: 1,
     );
 
@@ -115,15 +115,15 @@ class _ImageFlingState extends State<ImageFling> with TickerProviderStateMixin {
       onPanUpdate: (details) {
         setState(() {
           _dragAlignment += Alignment(
-            details.delta.dx / (size.width / 8),
-            details.delta.dy / (size.height / 8),
+            details.delta.dx / (size.width / 6),
+            details.delta.dy / (size.height / 6),
           );
         });
       },
       onPanEnd: (details) {
         _runAnimation(details.velocity.pixelsPerSecond, size);
 
-        if (_dragAlignment.y < -.6) {
+        if (_dragAlignment.y < -.7) {
           print("Yayyyy");
           animationController.stop();
           physicsController.stop();

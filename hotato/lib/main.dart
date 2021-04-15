@@ -59,7 +59,6 @@ class _MyHomePageState extends State<MyHomePage> {
   bool noPotato = false;
   bool hasDied = false;
   bool hasWon = false;
-  bool firstTime = true;
   String uuid;
   
 
@@ -136,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void setFirstTimeState(bool firstTime, String uuid) {
     setState(() {
-      this.firstTime = firstTime;
+      this.hasLoggedIn = !firstTime;
       this.uuid = uuid;
     });
   }
