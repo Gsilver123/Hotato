@@ -223,6 +223,7 @@ class _MyHomePageState extends State<MyHomePage> {
           if (hasPotato == 0) {
             this.noPotato = true;
           } else if (hasPotato == 1) {
+            this.hasFlicked = false;
             this.noPotato = false;
           }
           this.hasWon = false;
