@@ -226,10 +226,8 @@ class _MyHomePageState extends State<MyHomePage> {
             this.noPotato = false;
           }
           this.hasWon = false;
-          this.hasDied = false;
         } else if (state == 2) {
           this.noPotato = false;
-          this.hasDied = false;
           this.hasWon = true;
         } 
       });
