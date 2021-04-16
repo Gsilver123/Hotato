@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'imageFling.dart';
 import 'loginScreen.dart';
 import 'apiService.dart';
@@ -6,7 +7,12 @@ import 'sharedPreferences.dart';
 import 'dart:async';
 
 void main() {
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
+    .then((_) {
+      runApp(new MyApp());
+    });
+  // runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
